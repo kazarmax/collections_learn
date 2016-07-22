@@ -374,24 +374,35 @@ public class LinkedList<T> implements List<T> {
         @Override
         public T next() {
             // BEGIN (write your solution here)
+            System.out.println("In next() start");
+            System.out.println("Index of current = " + current);
+            System.out.println("Index of last = " + indexOf(last));
             if (!hasNext())
                 throw new NoSuchElementException();
 
             last = current;
             current = current.next;
+            System.out.println("In next() end");
+            System.out.println("Index of current = " + indexOf(current));
+            System.out.println("Index of last = " + indexOf(last));
             return last.getElement();
             // END
         }
 
         @Override
         public void add(final T element) {
+            if (last == null)
+                throw new IllegalStateException();
             LinkedList.this.add(element);
+            last = null;
         }
 
         @Override
         public void set(final T element) {
             // BEGIN (write your solution here)
-            LinkedList.this.set(LinkedList.this.indexOf(last), element);
+            if (last == null)
+                throw new IllegalStateException();
+            last.element = element;
             // END
         }
 
@@ -414,7 +425,10 @@ public class LinkedList<T> implements List<T> {
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-            if (LinkedList.this.indexOf(current) > 0) return true;
+            System.out.println("Index of current = " + indexOf(current));
+            System.out.println("Index of last = " + indexOf(last));
+            if (indexOf(current) > 0 || indexOf(last) == 0)
+                return true;
             return false;
             // END
         }
@@ -433,7 +447,10 @@ public class LinkedList<T> implements List<T> {
         @Override
         public void remove() {
             // BEGIN (write your solution here)
+            if (last == null)
+                throw new IllegalStateException();
             LinkedList.this.remove(last);
+            last = null;
             // END
         }
 
