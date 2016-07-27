@@ -167,7 +167,6 @@ public class LinkedList<T> implements List<T> {
     @Override
     public boolean addAll(final Collection<? extends T> c) {
         for (final T item : c) {
-            System.out.println("I'm here");
             add(item);
         }
         return true;
@@ -347,6 +346,8 @@ public class LinkedList<T> implements List<T> {
 
         private Item<T> last;
 
+        private int position;
+
         public ElementsIterator() {
             this(0);
         }
@@ -355,6 +356,8 @@ public class LinkedList<T> implements List<T> {
             // BEGIN (write your solution here)
             if  (index < 0 || index > size())
                 throw new IndexOutOfBoundsException();
+
+            this.position = index;
 
             int i = 0;
             for (Item<T> x = first; x != null; x = x.next) {
@@ -374,17 +377,14 @@ public class LinkedList<T> implements List<T> {
         @Override
         public T next() {
             // BEGIN (write your solution here)
-            System.out.println("In next() start");
-            System.out.println("Index of current = " + current);
-            System.out.println("Index of last = " + indexOf(last));
             if (!hasNext())
                 throw new NoSuchElementException();
 
             last = current;
             current = current.next;
-            System.out.println("In next() end");
-            System.out.println("Index of current = " + indexOf(current));
-            System.out.println("Index of last = " + indexOf(last));
+
+            position++;
+
             return last.getElement();
             // END
         }
@@ -409,25 +409,23 @@ public class LinkedList<T> implements List<T> {
         @Override
         public int previousIndex(){
             // BEGIN (write your solution here)
-            if (current == first)
+            if (position == 0)
                 return -1;
-            return LinkedList.this.indexOf(current) - 1;
+            return position - 1;
             // END
         }
 
         @Override
         public int nextIndex() {
             // BEGIN (write your solution here)
-            return LinkedList.this.indexOf(current);
+            return position;
             // END
         }
 
         @Override
         public boolean hasPrevious() {
             // BEGIN (write your solution here)
-            System.out.println("Index of current = " + indexOf(current));
-            System.out.println("Index of last = " + indexOf(last));
-            if (indexOf(current) > 0 || indexOf(last) == 0)
+            if (position > 0)
                 return true;
             return false;
             // END
@@ -439,7 +437,8 @@ public class LinkedList<T> implements List<T> {
             if (!hasPrevious())
                 throw new NoSuchElementException();
 
-            last = current = current.prev;
+            current = last;
+            position--;
             return last.getElement();
             // END
         }
@@ -449,8 +448,9 @@ public class LinkedList<T> implements List<T> {
             // BEGIN (write your solution here)
             if (last == null)
                 throw new IllegalStateException();
-            LinkedList.this.remove(last);
+            LinkedList.this.remove(last.getElement());
             last = null;
+            position--;
             // END
         }
 
