@@ -109,9 +109,7 @@ public class HashTableBasedMap<K, V> implements Map<K, V> {
     @Override
     public void clear() {
         // BEGIN (write your solution here)
-        for (int i = 0; i < NUMBER_OF_BUCKETS; i++) {
-            buckets.get(i).clear();
-        }
+        buckets.clear();
         // END
     }
 
